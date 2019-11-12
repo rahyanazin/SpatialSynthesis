@@ -3,7 +3,7 @@
 #include <QSGGeometryNode>
 #include <QSGFlatColorMaterial>
 
-#define BUFFER_SIZE 1024*8
+#define SNAPSHOT_LENGTH 1024*8
 
 SignalPlot::SignalPlot(QQuickItem *parent) :
     QQuickItem(parent)
@@ -11,7 +11,7 @@ SignalPlot::SignalPlot(QQuickItem *parent) :
     setFlag(ItemHasContents, true);
 
     _buffer.clear();
-    for(int i=0; i<BUFFER_SIZE; i++)
+    for(int i=0; i<SNAPSHOT_LENGTH; i++)
         _buffer.append(0.f);
 
     startTimer(16);
@@ -32,11 +32,11 @@ void SignalPlot::process(float *buffer, int frames)
 {
     for (int i=0; i<frames; i++)
     {
-        _buffer.append(buffer[i*2]);
+        _buffer.append(buffer[i]);
         _buffer.dequeue();
 
-        _buffer.append(buffer[i*2+1]);
-        _buffer.dequeue();
+        /*_buffer.append(buffer[i*2+1]);
+        _buffer.dequeue();*/
     }
 }
 
@@ -46,7 +46,7 @@ QSGNode* SignalPlot::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNo
     QSGGeometry *geometry = 0;
     QSGFlatColorMaterial *material = 0;
 
-    int bufferSize = BUFFER_SIZE;
+    int bufferSize = SNAPSHOT_LENGTH;
     int verticesNumber = bufferSize;
 
     if (!oldNode)

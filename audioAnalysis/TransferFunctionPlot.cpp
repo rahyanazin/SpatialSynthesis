@@ -8,7 +8,7 @@
 
 #define VERTICES 1024*8
 
-#define MAX_GAIN_REFERENCE 20.0 //max value in dB represented in Plot
+#define MAX_GAIN_REFERENCE 30.0 //max value in dB represented in Plot
 
 TransferFunctionPlot::TransferFunctionPlot(QQuickItem *parent) :
     QQuickItem(parent),

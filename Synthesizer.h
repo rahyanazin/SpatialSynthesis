@@ -28,8 +28,6 @@ public:
     Q_OBJECT
     //Synthesis mode
     Q_PROPERTY(int mode READ mode WRITE setMode NOTIFY modeChanged)
-    Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
-
 
 public:
 
@@ -39,9 +37,6 @@ public:
 
     int mode();
     void setMode(int mode);
-
-    bool running();
-    void setRunning(bool running);
 
     double step();
 
@@ -60,7 +55,6 @@ private:
     int _sampleRate;
 
     int _mode;
-    bool _running;
 
     //Sources
     Sine* _sine;

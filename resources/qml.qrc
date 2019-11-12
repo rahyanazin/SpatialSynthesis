@@ -4,5 +4,6 @@
         <file>qml/Knob.qml</file>
         <file>qml/SynthesizerController.qml</file>
         <file>qml/SpatialSoundController.qml</file>
+        <file>qml/DimensionController.qml</file>
     </qresource>
 </RCC>

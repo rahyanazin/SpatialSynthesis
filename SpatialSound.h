@@ -2,6 +2,9 @@
 #define SPATIALSOUND_H
 
 #include <QObject>
+#include <QString>
+
+#include <string>
 
 #include "Sine.h"
 #include "Square.h"
@@ -11,8 +14,11 @@
 
 #include "TransferFunctionPlot.h"
 
-
 #define DEFAULT_SAMPLE_RATE 44100
+
+#define DEFAULT_MAX_AZIMUTH 90.0
+#define DEFAULT_MAX_PHO     200.0
+#define DEFAULT_MIN_PHO     1.0
 
 
 class SpatialSound : public QObject
@@ -39,6 +45,9 @@ public:
     bool running();
     void setRunning(bool running);
 
+    double get_pho(double normalized_pho);
+    double get_azimuth(double normalized_azimuth);
+
     double process_left(double input);
     double process_right(double input);
 
@@ -48,7 +57,13 @@ public:
     void setRightPlot(TransferFunctionPlot* rightPlot);
 
 public slots:
+    void reset();
     void setAzimuth(double normalized_azimuth);
+    void setAzimuthRunning(bool running);
+    void setPho(double normalized_pho);
+    void setPhoRunning(bool running);
+    QString azimuthLabel(double normalized_azimuth);
+    QString phoLabel(double normalized_pho);
 
 signals:
     void runningChanged();
@@ -59,6 +74,8 @@ private:
     int _sampleRate;
 
     bool _running;
+    bool _running_pho;
+    bool _running_azimuth;
 
     HeadModel* _left;
     HeadModel* _right;

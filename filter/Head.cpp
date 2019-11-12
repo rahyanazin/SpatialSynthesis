@@ -4,6 +4,9 @@
 
 #include <qmath.h>
 #include <complex>
+#include <unordered_map>
+
+#include <Table.h>
 
 #define DEFAULT_SAMPLE_RATE     44100
 
@@ -15,6 +18,7 @@ Head::Head(QObject *parent) :
     _lastY1(0.0),
     _azimuth(45.0)
 {
+    new Table();
     update();
 }
 
@@ -41,7 +45,7 @@ void Head::setAzimuth(double azimuth)
 
 void Head::update()
 {
-    a = 8.75/100.0; //Head radius
+    a = 8.75;//100.0; //Head radius
     c = 340; //Sound speed
     alpha_min = 0.1;
     theta_min = 180.0;
@@ -52,7 +56,7 @@ void Head::update()
             theta_inc = _azimuth+90.0;
         break;
         case Right:
-            theta_inc = _azimuth-90.0;
+            theta_inc = 90.0-_azimuth;
         break;
     }
 

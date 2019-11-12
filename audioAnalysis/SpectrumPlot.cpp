@@ -9,7 +9,7 @@
 #define FFT_SIZE            8192
 
 #define MAX_GAIN_DB         20
-#define MAX_ATTENUATION_DB  70
+#define MAX_ATTENUATION_DB  20
 
 #define MAX_GAIN            pow(10.0, MAX_GAIN_DB/20)
 #define MIN_GAIN            pow(10.0, -MAX_ATTENUATION_DB/20)
@@ -70,8 +70,10 @@ void SpectrumPlot::timerEvent(QTimerEvent *event)
 
 void SpectrumPlot::process(float *buffer, int frames)
 {
-    for (int i=0; i<frames; i++)
-        _signal.append(buffer[i*2]);
+    for (int i=0; i<frames; i++) {
+//        _signal.append(buffer[i*2]);
+        _signal.append(buffer[i]);
+    }
 
     while (_signal.size()>_size)
         _signal.dequeue();

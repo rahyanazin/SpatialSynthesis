@@ -2,6 +2,8 @@
 
 #include <qmath.h>
 
+#include <Table.h>
+
 static int rtaudio_callback(void *output, void *input, unsigned int frames, double streamtime, RtAudioStreamStatus status, void *data)
 {
     Q_UNUSED(streamtime)
@@ -11,6 +13,7 @@ static int rtaudio_callback(void *output, void *input, unsigned int frames, doub
     Controller *controller = (Controller*) data;
 
     if (controller){
+        //qDebug() << frames;
         controller->process((float*)output, frames);
     }
 
@@ -20,9 +23,12 @@ static int rtaudio_callback(void *output, void *input, unsigned int frames, doub
 Controller::Controller(QObject *parent) :
     QObject(parent),
     _audio(nullptr),
-    _signalPlot(nullptr),
-    _spectrumPlot(nullptr),
-    _bufferSize(512),
+    _running(false),
+    _signalLeft(nullptr),
+    _signalRight(nullptr),
+    _spectrumLeft(nullptr),
+    _spectrumRight(nullptr),
+    _bufferSize(1024),
     _channels(2),
     _sampleRate(44100)
 {
@@ -99,53 +105,103 @@ SpatialSound *Controller::spatialSound()
     return _spatialSound;
 }
 
-void Controller::process(float *output, int frames)
+void Controller::signalProcess(float *output, float *output_left, float*output_right, int frames)
 {
-    float *output0 = output;
-
-    float v;
+    double v_left = 0.0;
+    double v_right = 0.0;
 
     for (int i=0; i<frames; i++)
     {
-        v = 0;
+        if(_running)
+            if(_synth) {
+                double v = _synth->step();
+                v_left = _spatialSound->process_left(v);
+                v_right = _spatialSound->process_right(v);
+            }
 
-        if(_synth)
-            v += _synth->step();
+        *output_left++ = static_cast <float> (v_left);
+        *output_right++ = static_cast <float> (v_right);
 
-        *output++ = _spatialSound->process_left(v);
-        *output++ = _spatialSound->process_right(v);
+        *output++ = static_cast <float> (v_left);
+        *output++ = static_cast <float> (v_right);
     }
-
-    output = output0;
-
-    if (_signalPlot){
-        _signalPlot->process(output, frames);
-    }
-
-    if (_spectrumPlot)
-        _spectrumPlot->process(output, frames);
 }
 
-SignalPlot *Controller::signalPlot()
+void Controller::process(float *output, int frames)
 {
-    return _signalPlot;
+    float output_left[frames];
+    float output_right[frames];
+
+    signalProcess(output, output_left, output_right, frames);
+
+    if (_signalLeft)
+        _signalLeft->process(output_left, frames);
+
+    if (_signalRight)
+        _signalRight->process(output_right, frames);
+
+    if (_spectrumLeft)
+        _spectrumLeft->process(output_left, frames);
+
+    if (_spectrumRight)
+        _spectrumRight->process(output_right, frames);
 }
 
-void Controller::setSignalPlot(SignalPlot *signalPlot)
+bool Controller::running()
 {
-    _signalPlot = signalPlot;
-
-    emit signalPlotChanged();
+    return _running;
 }
 
-SpectrumPlot *Controller::spectrumPlot()
+void Controller::setRunning(bool running)
 {
-    return _spectrumPlot;
+    _running = running;
+
+    emit runningChanged();
 }
 
-void Controller::setSpectrumPlot(SpectrumPlot *spectrumPlot)
+SignalPlot *Controller::signalLeft()
 {
-    _spectrumPlot = spectrumPlot;
+    return _signalLeft;
+}
 
-    emit spectrumPlotChanged();
+void Controller::setSignalLeft(SignalPlot *signalLeft)
+{
+    _signalLeft = signalLeft;
+
+    emit signalLeftChanged();
+}
+SignalPlot *Controller::signalRight()
+{
+    return _signalRight;
+}
+
+void Controller::setSignalRight(SignalPlot *signalPlot)
+{
+    _signalRight = signalPlot;
+
+    emit signalRightChanged();
+}
+
+SpectrumPlot *Controller::spectrumLeft()
+{
+    return _spectrumLeft;
+}
+
+void Controller::setSpectrumLeft(SpectrumPlot *spectrumLeft)
+{
+    _spectrumLeft = spectrumLeft;
+
+    emit spectrumLeftChanged();
+}
+
+SpectrumPlot *Controller::spectrumRight()
+{
+    return _spectrumRight;
+}
+
+void Controller::setSpectrumRight(SpectrumPlot *spectrumRight)
+{
+    _spectrumRight = spectrumRight;
+
+    emit spectrumRightChanged();
 }

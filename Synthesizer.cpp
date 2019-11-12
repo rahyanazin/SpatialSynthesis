@@ -3,8 +3,7 @@
 Synthesizer::Synthesizer(QObject* parent) :
     QObject(parent),    
     _sampleRate(DEFAULT_SAMPLE_RATE),
-    _mode(0),
-    _running(false)
+    _mode(0)
 {
     // Sources
     _sine = new Sine();
@@ -38,34 +37,22 @@ void Synthesizer::setMode(int mode)
     _mode = mode;
 }
 
-bool Synthesizer::running()
-{
-    return _running;
-}
-
-void Synthesizer::setRunning(bool running)
-{
-    _running = running;
-}
-
 double Synthesizer::step()
 {
     double v = 0;
 
-    if (_running){
-        switch (_mode) {
-            case SineWave:
-                v = 0.4*_sine->step();
-            break;
+    switch (_mode) {
+        case SineWave:
+            v = 0.4*_sine->step();
+        break;
 
-            case SquareWave:
-                v = 0.4*_square->step();
-            break;
+        case SquareWave:
+            v = 0.4*_square->step();
+        break;
 
-            case Noise:
-                v = _lowpass->process(_noise->step());
-            break;
-        }
+        case Noise:
+            v = _lowpass->process(_noise->step());
+        break;
     }
 
     return v;

@@ -24,6 +24,7 @@ HEADERS +=  \
             SpatialSound.h \
             filter/Head.h \
             filter/HeadModel.h \
+            filter/Table.h \
             rtaudio/RtAudio.h \
             filter/Filter.h \
             filter/Bandpass.h \
@@ -43,6 +44,7 @@ SOURCES +=  main.cpp \
             SpatialSound.cpp \
             filter/Head.cpp \
             filter/HeadModel.cpp \
+            filter/Table.cpp \
             rtaudio/RtAudio.cpp \
             filter/Filter.cpp \
             filter/Bandpass.cpp \
