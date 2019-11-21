@@ -13,10 +13,13 @@ class SpectrumPlot : public QQuickItem
     Q_OBJECT
 
 public:
+    enum{red,blue,yellow};
     SpectrumPlot(QQuickItem *parent=0);
     ~SpectrumPlot();
 
     QSGNode* updatePaintNode(QSGNode *, UpdatePaintNodeData *);
+
+    void setColor(int color);
 
     void process(float *buffer, int frames);
 
@@ -27,6 +30,8 @@ protected:
 private:
     int _size;
     float _sampleRate;
+
+    Qt::GlobalColor _color;
 
     void configFFT();
 

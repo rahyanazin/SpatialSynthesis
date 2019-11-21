@@ -6,7 +6,7 @@
 #include <complex>
 #include <unordered_map>
 
-#include <Table.h>
+#include <HeadModelTable.h>
 
 #define DEFAULT_SAMPLE_RATE     44100
 
@@ -18,7 +18,7 @@ Head::Head(QObject *parent) :
     _lastY1(0.0),
     _azimuth(45.0)
 {
-    new Table();
+    new HeadModelTable();
     update();
 }
 

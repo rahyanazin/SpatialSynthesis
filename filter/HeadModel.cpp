@@ -5,7 +5,7 @@
 #include <qmath.h>
 #include <complex>
 
-#include <Table.h>
+#include <HeadModelTable.h>
 
 #define DEFAULT_SAMPLE_RATE     44100
 
@@ -15,8 +15,6 @@ HeadModel::HeadModel(QObject *parent) :
     Filter(parent),
     _sampleRate(DEFAULT_SAMPLE_RATE),
     _position(Left),
-    _pho_running(true),
-    _azimuth_running(true),
     _azimuth(0.0),
     _headRadius(DEFAULT_HEAD_RADIUS),
     _pho(100.5),
@@ -25,7 +23,7 @@ HeadModel::HeadModel(QObject *parent) :
     _lastY1(0.0),
     _lastY2(0.0)
 {
-    _tables = new Table();
+    _tables = new HeadModelTable();
 
     update();
 }
@@ -53,13 +51,6 @@ void HeadModel::setAzimuth(double azimuth)
     update();
 }
 
-void HeadModel::setAzimuthRunning(bool running)
-{
-    _azimuth_running = running;
-
-    reset();
-}
-
 void HeadModel::setPho(double pho)
 {
     _pho = pho;
@@ -69,11 +60,9 @@ void HeadModel::setPho(double pho)
     update();
 }
 
-void HeadModel::setPhoRunning(bool running)
+void HeadModel::setElevation(double pho)
 {
-    _pho_running = running;
 
-    reset();
 }
 
 void HeadModel::update()
@@ -125,7 +114,7 @@ void HeadModel::update()
 
 void HeadModel::reset()
 {
-    qDebug() << "reseting";
+    //qDebug() << "reseting";
 
     _lastX1 = 0.0;
     _lastX2 = 0.0;
@@ -138,14 +127,7 @@ double HeadModel::process(double input)
 
     double y = input;
 
-    if (_pho_running && _azimuth_running)
-        y = b0*input + b1*_lastX1 + b2*_lastX2 - a1*_lastY1 - a2*_lastY2;
-
-    if (_pho_running && !_azimuth_running)
-        y = p_b0*input + p_b1*_lastX1 - p_a1*_lastY1;
-
-    if (!_pho_running && _azimuth_running)
-        y = a_b0*input + a_b1*_lastX1 - a_a1*_lastY1;
+    y = b0*input + b1*_lastX1 + b2*_lastX2 - a1*_lastY1 - a2*_lastY2;
 
     _lastX2 = _lastX1;
     _lastX1 = input;
@@ -168,35 +150,12 @@ double HeadModel::transferFunction(double omega)
     double denRe = 0.0;
     double denIm = 0.0;
 
-    if (_pho_running && _azimuth_running) {
-        numRe = b0 + b1*qCos(omega) + b2*qCos(2*omega);
-        numIm = -b1*qSin(omega) -b2*qSin(2*omega);
-        denRe = 1 + a1*qCos(omega) + a2*qCos(2*omega);
-        denIm = -a1*qSin(omega) -a2*qSin(2*omega);
-    }
-
-    if (_pho_running && !_azimuth_running) {
-        numRe = p_b0 + p_b1*qCos(omega);
-        numIm = -p_b1*qSin(omega);
-        denRe = 1 + p_a1*qCos(omega);
-        denIm = -p_a1*qSin(omega);
-    }
-
-    if (!_pho_running && _azimuth_running) {
-        numRe = a_b0 + a_b1*qCos(omega);
-        numIm = -a_b1*qSin(omega);
-        denRe = 1 + a_a1*qCos(omega);
-        denIm = -a_a1*qSin(omega);
-    }
+    numRe = b0 + b1*qCos(omega) + b2*qCos(2*omega);
+    numIm = -b1*qSin(omega) -b2*qSin(2*omega);
+    denRe = 1 + a1*qCos(omega) + a2*qCos(2*omega);
+    denIm = -a1*qSin(omega) -a2*qSin(2*omega);
 
     double out = qSqrt((numRe*numRe + numIm*numIm)/(denRe*denRe + denIm*denIm));
 
     return out;
-
-    /*std::complex<double> z(cos(omega), sin(omega));
-    std::complex<double> Hz(0,0);
-
-    Hz = (a0 + a1*pow(z,-1) + a2*pow(z,-2))/(b1*pow(z,-1) + b2*pow(z,-2));
-
-    return Hz;*/
 }

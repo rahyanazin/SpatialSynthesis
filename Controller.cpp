@@ -2,7 +2,7 @@
 
 #include <qmath.h>
 
-#include <Table.h>
+#include <HeadModelTable.h>
 
 static int rtaudio_callback(void *output, void *input, unsigned int frames, double streamtime, RtAudioStreamStatus status, void *data)
 {
@@ -167,6 +167,7 @@ SignalPlot *Controller::signalLeft()
 void Controller::setSignalLeft(SignalPlot *signalLeft)
 {
     _signalLeft = signalLeft;
+    _signalLeft->setColor(SignalPlot::blue);
 
     emit signalLeftChanged();
 }
@@ -178,6 +179,7 @@ SignalPlot *Controller::signalRight()
 void Controller::setSignalRight(SignalPlot *signalPlot)
 {
     _signalRight = signalPlot;
+    _signalRight->setColor(SignalPlot::yellow);
 
     emit signalRightChanged();
 }
@@ -190,6 +192,7 @@ SpectrumPlot *Controller::spectrumLeft()
 void Controller::setSpectrumLeft(SpectrumPlot *spectrumLeft)
 {
     _spectrumLeft = spectrumLeft;
+    _spectrumLeft->setColor(SignalPlot::blue);
 
     emit spectrumLeftChanged();
 }
@@ -202,6 +205,7 @@ SpectrumPlot *Controller::spectrumRight()
 void Controller::setSpectrumRight(SpectrumPlot *spectrumRight)
 {
     _spectrumRight = spectrumRight;
+    _spectrumRight->setColor(SignalPlot::yellow);
 
     emit spectrumRightChanged();
 }

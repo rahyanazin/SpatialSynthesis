@@ -45,6 +45,15 @@ SpectrumPlot::SpectrumPlot(QQuickItem *parent) :
     startTimer(16);
 }
 
+void SpectrumPlot::setColor(int color)
+{
+    switch(color){
+        case red: _color = Qt::red; break;
+        case blue: _color = Qt::blue; break;
+        case yellow: _color = Qt::yellow; break;
+    }
+}
+
 SpectrumPlot::~SpectrumPlot()
 {
     fftw_destroy_plan(_fft_plan);
@@ -131,7 +140,7 @@ QSGNode* SpectrumPlot::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         geometryNode->setFlag(QSGNode::OwnsGeometry);
 
         material = new QSGFlatColorMaterial;
-        material->setColor(Qt::white);
+        material->setColor(_color);
 
         geometryNode->setMaterial(material);
         geometryNode->setFlag(QSGNode::OwnsMaterial);
@@ -143,7 +152,7 @@ QSGNode* SpectrumPlot::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         transformNode = static_cast<QSGTransformNode*>(oldNode);
         transformNode->setMatrix(QMatrix4x4(transform));
         geometryNode = static_cast<QSGGeometryNode*>(transformNode->childAtIndex(0));
-        ((QSGFlatColorMaterial*) geometryNode->material())->setColor(Qt::white);
+        ((QSGFlatColorMaterial*) geometryNode->material())->setColor(_color);
 
         geometry = geometryNode->geometry();
         geometry->allocate(verticesNumber);

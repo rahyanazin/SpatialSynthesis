@@ -17,14 +17,19 @@ INCLUDEPATH +=  \
                 $$PWD/audioAnalysis \
                 $$PWD/synthesis \
                 $$PWD/filter \
-                $$PWD/fftw
+                $$PWD/fftw \
+                $$PWD/numpy
 
 HEADERS +=  \
             Controller.h \
             SpatialSound.h \
+            filter/CIPIC.h \
+            #filter/CIPIC_Table.h \
             filter/Head.h \
             filter/HeadModel.h \
-            filter/Table.h \
+            filter/HeadModelTable.h \
+            #filter/PinnaModel.h \
+            #filter/PinnaModelTable.h \
             rtaudio/RtAudio.h \
             filter/Filter.h \
             filter/Bandpass.h \
@@ -37,14 +42,19 @@ HEADERS +=  \
             audioAnalysis/SignalPlot.h \
             audioAnalysis/TransferFunctionPlot.h \
             audioAnalysis/SpectrumPlot.h \
-            Synthesizer.h
+            Synthesizer.h \
+            numpy/npy.hpp
 
 SOURCES +=  main.cpp \
             Controller.cpp \
             SpatialSound.cpp \
+            filter/CIPIC.cpp \
+            #filter/CIPIC_Table.cpp \
             filter/Head.cpp \
             filter/HeadModel.cpp \
-            filter/Table.cpp \
+            filter/HeadModelTable.cpp \
+            #filter/PinnaModel.cpp
+            filter/PinnaModelTable.cpp \
             rtaudio/RtAudio.cpp \
             filter/Filter.cpp \
             filter/Bandpass.cpp \

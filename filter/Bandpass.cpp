@@ -148,13 +148,6 @@ double Bandpass::transferFunction(double omega)
     double out = qSqrt((numRe*numRe + numIm*numIm)/(denRe*denRe + denIm*denIm));
 
     return out;
-
-    /*std::complex<double> z(cos(omega), sin(omega));
-    std::complex<double> Hz(0,0);
-
-    Hz = (a0 + a1*pow(z,-1) + a2*pow(z,-2))/(b1*pow(z,-1) + b2*pow(z,-2));
-
-    return Hz;*/
 }
 
 double Bandpass::cutoff()

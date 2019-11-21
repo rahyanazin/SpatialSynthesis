@@ -6,7 +6,8 @@
 #define SNAPSHOT_LENGTH 1024*8
 
 SignalPlot::SignalPlot(QQuickItem *parent) :
-    QQuickItem(parent)
+    QQuickItem(parent),
+    _color(Qt::red)
 {
     setFlag(ItemHasContents, true);
 
@@ -26,6 +27,15 @@ void SignalPlot::timerEvent(QTimerEvent *event)
     (void) event;
 
     update();
+}
+
+void SignalPlot::setColor(int color)
+{
+    switch(color){
+        case red: _color = Qt::red; break;
+        case blue: _color = Qt::blue; break;
+        case yellow: _color = Qt::yellow; break;
+    }
 }
 
 void SignalPlot::process(float *buffer, int frames)
@@ -61,7 +71,7 @@ QSGNode* SignalPlot::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNo
         node->setFlag(QSGNode::OwnsGeometry);
 
         material = new QSGFlatColorMaterial;
-        material->setColor(Qt::white);
+        material->setColor(_color);
 
         node->setMaterial(material);
         node->setFlag(QSGNode::OwnsMaterial);
@@ -70,7 +80,7 @@ QSGNode* SignalPlot::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNo
     {
         node = static_cast<QSGGeometryNode*>(oldNode);
 
-        ((QSGFlatColorMaterial*) node->material())->setColor(Qt::white);
+        ((QSGFlatColorMaterial*) node->material())->setColor(_color);
 
         geometry = node->geometry();
         geometry->allocate(verticesNumber);

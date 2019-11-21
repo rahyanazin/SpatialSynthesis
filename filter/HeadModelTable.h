@@ -1,10 +1,10 @@
-#ifndef TABLE_H
-#define TABLE_H
+#ifndef HEADMODELTABLE_H
+#define HEADMODELTABLE_H
 
-class Table
+class HeadModelTable
 {
 public:
-    Table();
+    HeadModelTable();
 
     double dc_gain(double pho, double theta_inc);
     double high_frequency_gain(double pho, double theta_inc);
@@ -77,4 +77,4 @@ public:
     };
 };
 
-#endif // TABLE_H
+#endif // HEADMODELTABLE_H

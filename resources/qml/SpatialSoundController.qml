@@ -43,7 +43,7 @@ Item{
                     anchors.fill: parent
 
                     Item{
-                        Layout.preferredWidth: parent.width*0.3
+                        Layout.preferredWidth: parent.width*0.15
                         Layout.fillHeight: true
 
                         Rectangle {
@@ -68,6 +68,34 @@ Item{
                                 }
                             }
                         }
+                    }                   
+
+                    Item{
+                        Layout.preferredWidth: parent.width*0.18
+                        Layout.fillHeight: true
+
+                        Rectangle {
+//                            height: parent.height
+//                            width: height
+                            anchors.fill: parent
+
+                            Text{
+                                id: tf_button_text
+                                anchors.centerIn: parent
+                                text: 'Update\nTransfer Function:\nOn'
+                            }
+
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    spatialSound.transferFunction = !spatialSound.transferFunction
+                                    if(spatialSound.transferFunction)
+                                        tf_button_text.text = 'Update\nTransfer Function:\nOn'
+                                    else
+                                        tf_button_text.text = 'Update\nTransfer Function:\nOff'
+                                }
+                            }
+                        }
                     }
 
                     Item{
@@ -78,6 +106,7 @@ Item{
                             anchors.fill: parent
 
                             Rectangle {
+                                id: azimuth_rect
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 border.width: 1
@@ -88,7 +117,6 @@ Item{
                                     anchors.fill: parent
                                     name: "Azimuth"
                                     label: spatialSound.azimuthLabel(value)
-                                    onRunningChanged: spatialSound.setAzimuthRunning(running)
                                     onValueChanged: {
                                         spatialSound.setAzimuth(value)
                                         label = spatialSound.azimuthLabel(value)
@@ -97,6 +125,7 @@ Item{
                             }
 
                             Rectangle {
+                                id: pho_rect
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 border.width: 1
@@ -107,7 +136,6 @@ Item{
                                     anchors.fill: parent
                                     name: "Pho"
                                     label: spatialSound.phoLabel(value)
-                                    onRunningChanged: spatialSound.setPhoRunning(running)
                                     onValueChanged: {
                                         spatialSound.setPho(value)
                                         label = spatialSound.phoLabel(value)
@@ -117,26 +145,21 @@ Item{
                             }
 
                             Rectangle {
+                                id: elevation_rect
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
                                 border.width: 1
                                 border.color: "white"
-                                color: "#111111"
+                                color: "red"
 
                                 DimensionController {
                                     anchors.fill: parent
                                     name: "Elevation"
-                                    label: "22.5º"
+                                    value: 0.0
+                                    label: spatialSound.elevationLabel(0.0)
                                     onValueChanged: {
-                                        //spatialSound.setPho(value)
-                                        //label = spatialSound.phoLabel(value)
-                                        label = parseFloat(45*value).toFixed(1)+"º"
-                                    }
-                                    onRunningChanged: {
-                                        if (running)
-                                            console.log("elevation on!")
-                                        else
-                                            console.log("elevation off!")
+                                        spatialSound.setElevation(value)
+                                        label = spatialSound.elevationLabel(value)
                                     }
                                 }
                             }
@@ -144,6 +167,38 @@ Item{
                     }
 
                     Item{
+                        Layout.preferredWidth: parent.width*0.12
+                        Layout.fillHeight: true
+
+                        ComboBox {
+                            anchors.fill: parent
+                            anchors.centerIn: parent
+                            model: ["Head", "CIPIC"]
+
+                            Component.onCompleted: currentIndex = spatialSound.mode
+                            onActivated: {
+                                spatialSound.mode = currentIndex
+                                if (currentIndex == 0) {
+                                    azimuth_rect.color = "#111111"
+                                    pho_rect.color = "#111111"
+                                    elevation_rect.color = "red"
+                                    reset_headmodel.visible = true
+                                    subject_select.visible = false
+                                }
+                                else if (currentIndex == 1) {
+                                    azimuth_rect.color = "#111111"
+                                    pho_rect.color = "red"
+                                    elevation_rect.color = "#111111"
+                                    reset_headmodel.visible = false
+                                    subject_select.visible = true
+                                }
+                            }
+                        }
+
+                    }
+
+                    Item{
+                        id: reset_headmodel
                         Layout.preferredWidth: parent.width*0.1
                         Layout.fillHeight: true
 
@@ -152,6 +207,72 @@ Item{
                             anchors.fill: parent
                             text: "Reset"
                             onClicked: spatialSound.reset()
+                        }
+                    }
+
+                    Item{
+                        id: subject_select
+                        Layout.preferredWidth: parent.width*0.1
+                        Layout.fillHeight: true
+                        visible: false
+
+                        ComboBox {
+                            anchors.fill: parent
+                            anchors.centerIn: parent
+                            model: ["003",
+                                    "008",
+                                    "009",
+                                    "010",
+                                    "011",
+                                    "012",
+                                    "015",
+                                    "017",
+                                    "018",
+                                    "019",
+                                    "020",
+                                    "021",
+                                    "027",
+                                    "028",
+                                    "033",
+                                    "040",
+                                    "044",
+                                    "048",
+                                    "050",
+                                    "051",
+                                    "058",
+                                    "059",
+                                    "060",
+                                    "061",
+                                    "065",
+                                    "119",
+                                    "124",
+                                    "126",
+                                    "127",
+                                    "131",
+                                    "133",
+                                    "134",
+                                    "135",
+                                    "137",
+                                    "147",
+                                    "148",
+                                    "152",
+                                    "153",
+                                    "154",
+                                    "155",
+                                    "156",
+                                    "158",
+                                    "162",
+                                    "163",
+                                    "165",
+                                    "mean"]
+
+                            Component.onCompleted: {
+                                currentIndex = spatialSound.subject
+                            }
+
+                            onActivated: {
+                                spatialSound.subject = currentIndex
+                            }
                         }
                     }
                 }

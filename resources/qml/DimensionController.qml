@@ -11,7 +11,6 @@ RowLayout {
     property string name
     property string label
     property real value: 0.5
-    property bool running: true
 
     Item {
         Layout.fillWidth: true
@@ -28,31 +27,14 @@ RowLayout {
         }
     }
 
-    /*Item{
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
-        Text{
-            text: root.label
-            color: 'white'
-            anchors.centerIn: parent
-        }
-    }*/
-
     Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        CheckBox {
+        Text {
             anchors.centerIn: parent
-            checked: true
-            style: CheckBoxStyle {
-                label: Text {
-                    text: root.name
-                    color: "white"
-                }
-            }
-            onCheckedChanged: root.running = checked
+            text: root.name
+            color: 'white'
         }
     }
 }

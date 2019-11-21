@@ -1,13 +1,13 @@
-#include "Table.h"
+#include "HeadModelTable.h"
 #include "math.h"
 #include "QDebug"
 
-Table::Table()
+HeadModelTable::HeadModelTable()
 {
     high_frequency_gain(1.0, 40.0);
 }
 
-double Table::dc_gain(double pho, double theta_inc)
+double HeadModelTable::dc_gain(double pho, double theta_inc)
 {
     double gain_dc = 0.0;
 //    qDebug() << "ThInc: " << theta_inc;
@@ -74,7 +74,7 @@ double Table::dc_gain(double pho, double theta_inc)
     return gain_dc;
 }
 
-double Table::high_frequency_gain(double pho, double theta_inc)
+double HeadModelTable::high_frequency_gain(double pho, double theta_inc)
 {
     double gain_high_frequency = 0.0;
 
@@ -115,7 +115,7 @@ double Table::high_frequency_gain(double pho, double theta_inc)
     return gain_high_frequency;
 }
 
-double Table::shelving_filter_cutoff(double pho, double theta_inc)
+double HeadModelTable::shelving_filter_cutoff(double pho, double theta_inc)
 {
     double cutoff_high_frequency = 0.0;
 

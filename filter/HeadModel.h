@@ -6,7 +6,7 @@
 #include <QQuickItem>
 
 #include "Filter.h"
-#include "Table.h"
+#include "HeadModelTable.h"
 
 class HeadModel : public Filter
 {
@@ -24,9 +24,8 @@ public:
     void set_position(int pos);
 
     void setAzimuth(double azimuth);
-    void setAzimuthRunning(bool running);
     void setPho(double pho);
-    void setPhoRunning(bool running);
+    void setElevation(double pho);
 
     void update();
 
@@ -38,9 +37,6 @@ public:
 private:
     double _sampleRate;
     int _position;
-
-    bool _pho_running;
-    bool _azimuth_running;
 
     //Long Distance Head Filter Param
     double a_a1;
@@ -87,7 +83,7 @@ private:
     double a1;
     double a2;
 
-    Table* _tables;
+    HeadModelTable* _tables;
 };
 
 #endif // HEADMODEL_H

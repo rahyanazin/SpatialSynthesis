@@ -12,6 +12,8 @@
 #include "SignalPlot.h"
 #include "SpectrumPlot.h"
 
+#include "CIPIC.h"
+
 class Controller : public QObject
 {
     Q_OBJECT
@@ -76,6 +78,8 @@ private:
     unsigned int _bufferSize;
     int _channels;
     int _sampleRate;
+
+    CIPIC* cipic;
 };
 
 #endif // CONTROLLER_H
