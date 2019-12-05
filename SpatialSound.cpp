@@ -225,6 +225,11 @@ QString SpatialSound::elevationLabel(double normalized_elevation)
     return QString::number(get_elevation(normalized_elevation), 'f', 1)+"º";
 }
 
+void SpatialSound::impression()
+{
+    _left_CIPIC->impression();
+}
+
 TransferFunctionPlot* SpatialSound::leftPlot()
 {
     return _leftPlot;

@@ -100,21 +100,32 @@ void CIPIC::set_hrir_table()
             break;
         }
 
-        int az;
-        int elev = -1;
-        int time = -1;
-        for (size_t i = 0; i<data.size(); i++) {
-            az = i%((int)shape[0]);
-            if(az==0)
-                elev++;
-            elev = elev%((int)shape[1]);
-            if(az==0 && elev==0)
-                time++;
+//        int az;
+//        int elev = -1;
+//        int time = -1;
+//        for (size_t i = 0; i<data.size(); i++) {
+//            az = i%((int)shape[0]);
+//            if(az==0)
+//                elev++;
+//            elev = elev%((int)shape[1]);
+//            if(az==0 && elev==0)
+//                time++;
 
-            _hrir_table[s][az][elev][time] = data[i];
+//            _hrir_table[s][az][elev][time] = data[i];
+//        }
+
+        int az = -1;
+        int dt = -1;
+        int el = -1;
+        for (size_t i = 0; i<data.size(); i++) {
+            dt = i%200;
+            if (dt == 0)
+                el = (el+1)%9;
+            if (el == 0 && dt == 0)
+                az = (az+1)%19;
+            _hrir_table[s][az][el][dt] = data[i];
         }
     }
-
 }
 
 void CIPIC::set_position(int pos)
@@ -225,5 +236,38 @@ double CIPIC::transferFunction(double omega)
 
     return out;
 
-//    return 1;
+    //    return 1;
+}
+
+void CIPIC::impression()
+{
+//    qDebug() << _azimuth_index << _elevation_index;
+//    qDebug() << _azimuth_index << _elevation_index;
+//    qDebug() << "______________";
+//    for (int n=0; n<200; n++){
+//        qDebug()<< n << ": " << _hrir_table[_subject][_azimuth_index][_elevation_index][n];
+//    }
+
+//    for (int az = 0; az < 19; ++az) {
+//        QDebug deb = qDebug();
+//        for (int el = 0; el < 9; ++el)
+//            deb << _hrir_table[_subject][az][el][20];
+//    }
+
+    std::vector<unsigned long> shape;
+    std::vector<double> data;
+
+    npy::LoadArrayFromNumpy("C:/Users/rahya/OneDrive/Documentos/QtProjects/SpatialSynthesis/filter/CIPIC_Values/subject_003_l.npy", shape, data);
+
+    int az = -1;
+    int dt = -1;
+    int el = -1;
+    for (size_t i = 0; i<data.size(); i++) {
+        dt = i%200;
+        if (dt == 0)
+            el = (el+1)%9;
+        if (el == 0 && dt == 0)
+            az = (az+1)%19;
+        qDebug() << az << el << dt << data[i];
+    }
 }

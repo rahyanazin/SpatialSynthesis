@@ -40,12 +40,17 @@ public:
 
     double step();
 
+    double getTone(double normalized_tone);
+    double getResonance(double normalized_resonance);
+
 public slots:
     //Signal Source
-    void setTone(double tone);
+    void setTone(double normalized_tone);
+    QString toneLabel(double normalized_tone);
 
     //Noise
     void setResonance(double resonance);
+    QString resonanceLabel(double normalized_resonance);
 
 signals:
     void modeChanged();

@@ -120,7 +120,7 @@ Window {
             SpatialSoundController {
                 Layout.fillWidth: true
 //                Layout.fillHeight: true
-                Layout.preferredHeight: parent.height*0.5
+                Layout.preferredHeight: parent.height*0.4
                 Component.onCompleted: spatialSound = controller.spatialSound
             }
 
@@ -153,7 +153,7 @@ Window {
             Item{
                 Layout.fillWidth: true
 //                Layout.fillHeight: true
-                Layout.preferredHeight: parent.height*0.08
+                Layout.preferredHeight: parent.height*0.1
 
                 RowLayout {
                     anchors.fill: parent

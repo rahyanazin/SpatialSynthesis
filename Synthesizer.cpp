@@ -1,5 +1,8 @@
 #include "Synthesizer.h"
 
+#define MAXTONE 15000.0
+#define MINTONE 100.0
+
 Synthesizer::Synthesizer(QObject* parent) :
     QObject(parent),    
     _sampleRate(DEFAULT_SAMPLE_RATE),
@@ -58,16 +61,38 @@ double Synthesizer::step()
     return v;
 }
 
-void Synthesizer::setTone(double tone)
+double Synthesizer::getTone(double normalized_tone)
 {
-    double f = 20.0+21980.0*tone;
+    return MINTONE+(MAXTONE-MINTONE)*(std::exp(normalized_tone)-1.0)/((std::exp(1.0)-1.0));
+}
+
+QString Synthesizer::toneLabel(double normalized_tone)
+{
+    return QString::number(getTone(normalized_tone), 'f', 1)+"Hz";
+}
+
+void Synthesizer::setTone(double normalized_tone)
+{
+    double f = getTone(normalized_tone);
 
     _sine->setFrequency(f);
     _square->setFrequency(f);
     _lowpass->setCutoff(f);
 }
 
-void Synthesizer::setResonance(double resonance)
+void Synthesizer::setResonance(double normalized_resonance)
 {
-    _lowpass->setResonance(resonance);
+    double r = getResonance(normalized_resonance);
+
+    _lowpass->setResonance(r);
+}
+
+QString Synthesizer::resonanceLabel(double normalized_resonance)
+{
+    return QString::number(getResonance(normalized_resonance), 'f', 1);
+}
+
+double Synthesizer::getResonance(double normalized_resonance)
+{
+    return normalized_resonance*5.0;
 }

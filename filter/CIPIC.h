@@ -41,6 +41,8 @@ public:
 
     double transferFunction(double omega);
 
+    void impression();
+
 private:
     double _sampleRate;
     int _position;
@@ -58,11 +60,7 @@ private:
     QQueue<double> _last_values;
 
     double _hrir[200];
-    double _hrir_table[46][19][50][200];
-    //double _hrir_table_003[19][50][200];
-    double _hrir_table_008[19][50][200];
-    double _hrir_table_009[19][50][200];
-    double _hrir_table_mean[19][50][200];
+    double _hrir_table[46][19][9][200];
 
     int _subject;
 

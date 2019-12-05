@@ -50,36 +50,62 @@ Rectangle{
             RowLayout{
                 anchors.fill: parent
 
-                Item{
+                Rectangle{
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    border.width: 1
+                    border.color: "white"
+                    color: "#111111"
 
-                    Knob {
+                    DimensionController {
                         id: tone_knob
-                        height: parent.height
-                        width: height
-                        anchors.centerIn: parent
+                        anchors.fill: parent
                         name: "Freq"
                         value: 0.5
-                        onValueChanged: synth.setTone(value)
+                        label: synth.toneLabel(0.5)
+                        onValueChanged: {
+                            synth.setTone(value)
+                            label = synth.toneLabel(value)
+                        }
                     }
                 }
 
-                Item{
+                Rectangle{
                     id: res_knob
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    border.width: 1
+                    border.color: "white"
+                    color: "#111111"
                     visible: false
 
-                    Knob {
-                        height: parent.height
-                        width: height
-                        anchors.centerIn: parent
+                    DimensionController {
+                        anchors.fill: parent
                         name: "Res"
                         value: 0.5
-                        onValueChanged: synth.setResonance(value)
+                        label: synth.resonanceLabel(0.0)
+                        onValueChanged: {
+                            synth.setResonance(value)
+                            label = synth.resonanceLabel(value)
+                        }
                     }
                 }
+
+//                Item{
+//                    id: res_knob
+//                    Layout.fillWidth: true
+//                    Layout.fillHeight: true
+//                    visible: false
+
+//                    Knob {
+//                        height: parent.height
+//                        width: height
+//                        anchors.centerIn: parent
+//                        name: "Res"
+//                        value: 0.5
+//                        onValueChanged: synth.setResonance(value)
+//                    }
+//                }
             }
         }
     }

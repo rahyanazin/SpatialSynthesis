@@ -275,6 +275,13 @@ Item{
                             }
                         }
                     }
+
+                    Button {
+                        Layout.fillHeight: true
+                        Layout.maximumWidth: 20
+
+                        onClicked: spatialSound.impression()
+                    }
                 }
             }
         }

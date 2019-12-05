@@ -84,6 +84,8 @@ public slots:
     QString phoLabel(double normalized_pho);
     QString elevationLabel(double elevation_pho);
 
+    void impression();
+
 signals:
     void runningChanged();
     void transferFunctionChanged();
